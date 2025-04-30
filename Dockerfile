@@ -20,13 +20,18 @@
     # ---------- install PyNFFT + plotting -----------------------------------------
     RUN git clone https://github.com/ghisvail/pyNFFT.git && \
         cd pyNFFT && \
-        pip install cython==0.29.36 matplotlib && \
-        python setup.py build_ext  -I /usr/local/include -L /usr/local/lib -R /usr/local/lib && \
+        pip install --no-cache-dir cython==0.29.36 matplotlib && \
+        python setup.py build_ext -I /usr/local/include -L /usr/local/lib -R /usr/local/lib && \
         python setup.py install
     
     # ---------- copy user script ---------------------------------------------------
-    COPY fft_vs_pynfft.py  /opt/fft_vs_pynfft.py
-    # script saves plot to  /data/fft_vs_pynfft.png
+    #  ❱❱❱ název souboru změněn na compare.py
+    COPY compare.py /opt/compare.py
     
-    CMD ["python", "/opt/fft_vs_pynfft.py"]
+    # ---------- headless backend pro Matplotlib ------------------------------------
+    ENV MPLBACKEND=Agg           
+    
+    # ---------- default command ----------------------------------------------------
+    #  ❱❱❱ spouštíme nový skript
+    CMD ["python", "/opt/compare.py"]
     
